@@ -1,3 +1,7 @@
+# TL;DR
+This chrome extension uses a `manifest.json` as an outline of all pieces, sort of like a `package.json`.
+
+`/popup/` contains the markup and related files to handle everything you see after clicking on the extension button in Chrome.
 # References Used to Build This Extension
 
 ## High Level Overview
@@ -14,6 +18,9 @@ https://developer.mozilla.org/en-US/docs/Web/API/Document/readyState
 
 ## Extension That Makes Use of Bookmarks
 https://github.com/GoogleChrome/chrome-extensions-samples/tree/main/_archive/mv2/api/bookmarks/basic
+
+### API Reference of chrome.bookmarks
+https://developer.chrome.com/docs/extensions/reference/bookmarks/
 
 # Observations
 
