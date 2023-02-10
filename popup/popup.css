@@ -1,18 +1,23 @@
 .container {
-    margin: 1rem;
+	margin: 1rem 1rem 4rem;
 }
 
-#btn {
-    font-size: 16px;
-    text-align: center;
-    background-color: #acc034;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.5s;
+#button {
+	font-size: 16px;
+	text-align: center;
+	background-color: #acc034;
+	color: #fff;
+	padding: 10px 15px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.5s;
 }
-#btn:hover {
-    background-color: #9eb030;
+#button:hover {
+	background-color: #9eb030;
+}
+
+#changeText {
+	color: red;
+	visibility: hidden;
 }

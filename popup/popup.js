@@ -1,11 +1,12 @@
-const btn = document.querySelector("#btn");
-btn.addEventListener("click", showBookmarks);
+const button = document.querySelector("#button");
+const changeText = document.querySelector("#changeText");
+button.addEventListener("click", manageBookmarks);
 
 // TODO: Create function to append bookmarks to popup
 // TODO: Dynamically grab the title of the bookmark from the SUP
 // TODO: Turn the icon grayscale when not on a SUG SUP page
 
-function showBookmarks(event, bookmarkTitle = "SignUp") {
+function manageBookmarks(event, bookmarkTitle = "SignUp") {
 	// Search for SignUpSaver Folder
 	chrome.bookmarks.search(
 		{ query: "SignUpSaver", title: "SignUpSaver" },
@@ -16,9 +17,9 @@ function showBookmarks(event, bookmarkTitle = "SignUp") {
 			if (folderId) {
 				createBookmark(folderId);
 			} else {
-                // Else, create folder
-                createSignUpSaverFolder();
-            }
+				// Else, create folder
+				createSignUpSaverFolder();
+			}
 		}
 	);
 
@@ -43,5 +44,27 @@ function showBookmarks(event, bookmarkTitle = "SignUp") {
 			parentId: folderId,
 			index: 0,
 		});
+
+		toggleChangeText("addition");
+	}
+
+	// Toggle ChangeText
+	// addition, removal,
+	function toggleChangeText(change = "addition") {
+		switch (change) {
+			case "addition":
+				changeText.innerHTML = "Bookmark added";
+				break;
+			case "removal":
+				changeText.innerHTML = "Bookmark removed";
+				break;
+			default:
+				changeText.innerHTML = "Hmmm that didn't work";
+		}
+		changeText.style.visibility = "visible";
+
+		setTimeout(function hideText() {
+			changeText.style.visibility = "hidden";
+		}, 2000);
 	}
 }
