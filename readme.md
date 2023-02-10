@@ -2,6 +2,8 @@
 This chrome extension uses a `manifest.json` as an outline of all pieces, sort of like a `package.json`.
 
 `/popup/` contains the markup and related files to handle everything you see after clicking on the extension button in Chrome.
+
+It also contains `popup.js` which handles the bookmarks
 # References Used to Build This Extension
 
 ## High Level Overview

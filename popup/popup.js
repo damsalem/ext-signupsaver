@@ -2,7 +2,7 @@ const button = document.querySelector("#button");
 const changeText = document.querySelector("#changeText");
 button.addEventListener("click", manageBookmarks);
 
-// TODO: Create function to append bookmarks to popup
+// TODO: Create function to append bookmarks to popup (consider Alpine.js)
 // TODO: Dynamically grab the title of the bookmark from the SUP
 // TODO: Turn the icon grayscale when not on a SUG SUP page
 
