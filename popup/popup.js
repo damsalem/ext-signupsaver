@@ -1,12 +1,26 @@
+const bookmarks = document.querySelector("#bookmarks");
 const button = document.querySelector("#button");
 const changeText = document.querySelector("#changeText");
+let bookmarkTitle = "";
+let bookmarkUrl = "";
+
 button.addEventListener("click", manageBookmarks);
 
-// TODO: Create function to append bookmarks to popup (consider Alpine.js)
-// TODO: Dynamically grab the title of the bookmark from the SUP
+// Receive Tab Title from Script.js and Stash in Var
+chrome.runtime.onMessage.addListener(function (message, tab) {
+	console.log("message", message);
+	console.log("tab", tab);
+
+	bookmarkUrl = tab.url;
+	bookmarkTitle = tab.tab.title !== "" ? tab.tab.title : message;
+});
+
+// TODO: Fix popup.js so onMessage.addListener works immediately rather than requiring the extension's inspector be open and then refreshing the page
+// TODO: Store the data in the extension or at least grab it from existing bookmarks
+// TODO: Compare the new bookmark with existing to avoid duplicates
 // TODO: Turn the icon grayscale when not on a SUG SUP page
 
-function manageBookmarks(event, bookmarkTitle = "SignUp") {
+function manageBookmarks(event) {
 	// Search for SignUpSaver Folder
 	chrome.bookmarks.search(
 		{ query: "SignUpSaver", title: "SignUpSaver" },
@@ -38,18 +52,23 @@ function manageBookmarks(event, bookmarkTitle = "SignUp") {
 
 	// Create SignUpSaver Bookmark
 	function createBookmark(folderId) {
-		chrome.bookmarks.create({
-			title: bookmarkTitle,
-			url: "https://www.signupgenius.com/go/10c0f4baca92fa1fac34-test4#/",
-			parentId: folderId,
-			index: 0,
-		});
+		chrome.bookmarks.create(
+			{
+				title: bookmarkTitle,
+				url: bookmarkUrl,
+				parentId: folderId,
+				index: 0,
+			},
+			function () {
+				addToBookmarkList();
+			}
+		);
 
 		toggleChangeText("addition");
 	}
 
 	// Toggle ChangeText
-	// addition, removal,
+	// parameters include: "addition", "removal", and "exists"
 	function toggleChangeText(change = "addition") {
 		switch (change) {
 			case "addition":
@@ -57,6 +76,9 @@ function manageBookmarks(event, bookmarkTitle = "SignUp") {
 				break;
 			case "removal":
 				changeText.innerHTML = "Bookmark removed";
+				break;
+			case "exists":
+				changeText.innerHTML = "Bookmark already exists";
 				break;
 			default:
 				changeText.innerHTML = "Hmmm that didn't work";
@@ -66,5 +88,14 @@ function manageBookmarks(event, bookmarkTitle = "SignUp") {
 		setTimeout(function hideText() {
 			changeText.style.visibility = "hidden";
 		}, 2000);
+	}
+
+	// Add to Bookmark List
+	function addToBookmarkList() {
+		bookmarks.appendChild(
+			Object.assign(document.createElement("li"), {
+				innerHTML: bookmarkTitle,
+			})
+		);
 	}
 }
