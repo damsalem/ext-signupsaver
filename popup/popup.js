@@ -16,6 +16,9 @@ chrome.runtime.onMessage.addListener(function (message, tab) {
 });
 
 // TODO: Fix popup.js so onMessage.addListener works immediately rather than requiring the extension's inspector be open and then refreshing the page
+	// Try using the activeTab feature to send data without requiring a message on load. Will likely need to learn how to use action API
+	// https://developer.chrome.com/docs/extensions/mv3/manifest/activeTab/
+	// https://developer.chrome.com/docs/extensions/reference/action/#injecting-a-content-script-on-click
 // TODO: Store the data in the extension or at least grab it from existing bookmarks
 // TODO: Compare the new bookmark with existing to avoid duplicates
 // TODO: Turn the icon grayscale when not on a SUG SUP page
