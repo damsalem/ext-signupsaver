@@ -1,104 +1,110 @@
 const bookmarks = document.querySelector("#bookmarks");
-const button = document.querySelector("#button");
+const saveSupButton = document.querySelector("#button");
 const changeText = document.querySelector("#changeText");
 let bookmarkTitle = "";
 let bookmarkUrl = "";
 
-button.addEventListener("click", manageBookmarks);
-
-// Receive Tab Title from Script.js and Stash in Var
-chrome.runtime.onMessage.addListener(function (message, tab) {
-	console.log("message", message);
-	console.log("tab", tab);
-
-	bookmarkUrl = tab.url;
-	bookmarkTitle = tab.tab.title !== "" ? tab.tab.title : message;
-});
-
-// TODO: Fix popup.js so onMessage.addListener works immediately rather than requiring the extension's inspector be open and then refreshing the page
-	// Try using the activeTab feature to send data without requiring a message on load. Will likely need to learn how to use action API
-	// https://developer.chrome.com/docs/extensions/mv3/manifest/activeTab/
-	// https://developer.chrome.com/docs/extensions/reference/action/#injecting-a-content-script-on-click
-// TODO: Store the data in the extension or at least grab it from existing bookmarks
+// TODO: Store the popup.html markup state in localStorage or grab it from existing bookmarks
 // TODO: Compare the new bookmark with existing to avoid duplicates
 // TODO: Turn the icon grayscale when not on a SUG SUP page
 
-function manageBookmarks(event) {
-	// Search for SignUpSaver Folder
-	chrome.bookmarks.search(
-		{ query: "SignUpSaver", title: "SignUpSaver" },
-		function (folder) {
-			const folderId = folder[0]?.id;
+saveSupButton.addEventListener("click", handleSaveSup);
 
-			// If folder exists, create bookmark
-			if (folderId) {
-				createBookmark(folderId);
-			} else {
-				// Else, create folder
-				createSignUpSaverFolder();
-			}
-		}
-	);
+function handleSaveSup() {
+  // get the current tab
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const activeTab = tabs[0];
+    const tabTitle = activeTab.title;
+    const tabUrl = activeTab.url;
 
-	// Create SignUpSaver Folder
-	function createSignUpSaverFolder() {
-		chrome.bookmarks.create(
-			{
-				title: "SignUpSaver",
-			},
-			function (folder) {
-				// Create first bookmark
-				createBookmark(folder.id);
-			}
-		);
-	}
+    // tell content script to scrape data
+    chrome.tabs.sendMessage(
+      activeTab.id,
+      { action: "scrapeData" },
+      (response) => {
+        // data was scraped and now we update bookmarks
+        manageBookmarks(tabTitle, tabUrl);
+      }
+    );
+  });
+}
 
-	// Create SignUpSaver Bookmark
-	function createBookmark(folderId) {
-		chrome.bookmarks.create(
-			{
-				title: bookmarkTitle,
-				url: bookmarkUrl,
-				parentId: folderId,
-				index: 0,
-			},
-			function () {
-				addToBookmarkList();
-			}
-		);
+function manageBookmarks(title, url) {
+  // Search for SignUpSaver Folder
+  chrome.bookmarks.search(
+    { query: "SignUpSaver", title: "SignUpSaver" },
+    function (folder) {
+      const folderId = folder[0]?.id;
 
-		toggleChangeText("addition");
-	}
+      // If folder exists, create bookmark
+      if (folderId) {
+        createBookmark(title, url, folderId);
+      } else {
+        // Else, create folder
+        createSignUpSaverFolder(title, url);
+      }
+    }
+  );
 
-	// Toggle ChangeText
-	// parameters include: "addition", "removal", and "exists"
-	function toggleChangeText(change = "addition") {
-		switch (change) {
-			case "addition":
-				changeText.innerHTML = "Bookmark added";
-				break;
-			case "removal":
-				changeText.innerHTML = "Bookmark removed";
-				break;
-			case "exists":
-				changeText.innerHTML = "Bookmark already exists";
-				break;
-			default:
-				changeText.innerHTML = "Hmmm that didn't work";
-		}
-		changeText.style.visibility = "visible";
+  // Create SignUpSaver Folder
+  function createSignUpSaverFolder(title, url) {
+    chrome.bookmarks.create(
+      {
+        title: "SignUpSaver",
+      },
+      function (folder) {
+        // Create first bookmark
+        createBookmark(title, url, folder.id);
+      }
+    );
+  }
 
-		setTimeout(function hideText() {
-			changeText.style.visibility = "hidden";
-		}, 2000);
-	}
+  // Create SignUpSaver Bookmark
+  function createBookmark(title, url, folderId) {
+    chrome.bookmarks.create(
+      {
+        title: title,
+        url: url,
+        parentId: folderId,
+        index: 0,
+      },
+      function () {
+        addToBookmarkList(title);
+      }
+    );
 
-	// Add to Bookmark List
-	function addToBookmarkList() {
-		bookmarks.appendChild(
-			Object.assign(document.createElement("li"), {
-				innerHTML: bookmarkTitle,
-			})
-		);
-	}
+    toggleChangeText("addition");
+  }
+
+  // Toggle ChangeText
+  // parameters include: "addition", "removal", and "exists"
+  function toggleChangeText(change = "addition") {
+    switch (change) {
+      case "addition":
+        changeText.innerHTML = "Bookmark added";
+        break;
+      case "removal":
+        changeText.innerHTML = "Bookmark removed";
+        break;
+      case "exists":
+        changeText.innerHTML = "Bookmark already exists";
+        break;
+      default:
+        changeText.innerHTML = "Hmmm that didn't work";
+    }
+    changeText.style.visibility = "visible";
+
+    setTimeout(function hideText() {
+      changeText.style.visibility = "hidden";
+    }, 2000);
+  }
+
+  // Add to Bookmark List
+  function addToBookmarkList(title) {
+    bookmarks.appendChild(
+      Object.assign(document.createElement("li"), {
+        innerHTML: title,
+      })
+    );
+  }
 }
