@@ -42,6 +42,10 @@ https://plainenglish.io/blog/how-to-send-data-between-chrome-extension-scripts-1
 
 To update a Chrome extension under development, you must not only hit the reload button for the extension, but also reload the browser tab else errors will likely persist
 
+## Gathering Macro Tab Info
+
+Rather than scraping the title from a tab using the `content_scripts`, we can simply grab that data from the active tab using the `chrome.tabs` APIs.
+
 ## Sharing Information
 
 The following are two separate environments:

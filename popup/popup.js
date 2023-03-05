@@ -17,15 +17,7 @@ function handleSaveSup() {
         const tabTitle = activeTab.title;
         const tabUrl = activeTab.url;
 
-        // tell content script to scrape data
-        chrome.tabs.sendMessage(
-            activeTab.id,
-            { action: "scrapeData" },
-            (response) => {
-                // data was scraped and now we update bookmarks
-                manageBookmarks(tabTitle, tabUrl);
-            }
-        );
+        manageBookmarks(tabTitle, tabUrl);
     });
 }
 
