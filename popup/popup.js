@@ -6,6 +6,28 @@ const changeText = document.querySelector("#changeText");
 // TODO: Compare the new bookmark with existing to avoid duplicates
 // TODO: Turn the icon grayscale when not on a SUG SUP page
 
+/* chrome.action.onClicked.addListener(function () {
+	console.log("clicked!");
+	try {
+		await(async () => {
+			console.log("onLoadFn");
+			// Search for existing folder
+			let folderId = await getSignUpSaverFolderId();
+
+			if (!folderId) {
+				return;
+			}
+			// Query bookmarks for matches
+			const bookmarks = await getSignUpSaverBookmarks(folderId);
+			console.log("bookmarks", bookmarks);
+
+			//Update popup unordered list
+		})();
+	} catch (error) {
+		console.error(error);
+	}
+}); */
+
 saveSupButton.addEventListener("click", handleSaveSup);
 
 async function handleSaveSup() {
