@@ -22,10 +22,10 @@ async function handleSaveSup() {
 	const folderId = await searchOrCreateSignUpSaverFolder();
 
 	// Create the bookmark
-	const bookmark = createBookmark(activeTabTitle, activeTabUrl, folderId);
+	createBookmark(activeTabTitle, activeTabUrl, folderId);
 
 	// Query bookmarks for matches
-	getSignUpSaverBookmarks(folderId);
+	const bookmarkArray = await getSignUpSaverBookmarks(folderId);
 
 	// Update popup unordered list
 
@@ -103,10 +103,12 @@ function toggleChangeText(change = "addition") {
 }
 
 // Add to Bookmark List
-function addToBookmarkList(tabTitle) {
-	bookmarks.appendChild(
-		Object.assign(document.createElement("li"), {
-			innerHTML: tabTitle,
-		})
-	);
+function addToBookmarkList(tabTitleArray) {
+	tabTitleArray.forEach((title) => {
+		bookmarks.appendChild(
+			Object.assign(document.createElement("li"), {
+				innerHTML: title,
+			})
+		);
+	});
 }
