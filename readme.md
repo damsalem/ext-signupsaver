@@ -40,7 +40,7 @@ https://plainenglish.io/blog/how-to-send-data-between-chrome-extension-scripts-1
 
 ## Debugging Errors
 
-To update a Chrome extension under development, you must not only hit the reload button
+To update a Chrome extension under development, you must not only hit the reload button for the extension, but also reload the browser tab else errors will likely persist
 
 ## Sharing Information
 
