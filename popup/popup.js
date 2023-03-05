@@ -1,8 +1,6 @@
 const bookmarks = document.querySelector("#bookmarks");
 const saveSupButton = document.querySelector("#button");
 const changeText = document.querySelector("#changeText");
-let bookmarkTitle = "";
-let bookmarkUrl = "";
 
 // TODO: Get the popup.html markup state from existing bookmarks
 // TODO: Compare the new bookmark with existing to avoid duplicates
