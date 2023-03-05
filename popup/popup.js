@@ -11,7 +11,7 @@ let bookmarkUrl = "";
 saveSupButton.addEventListener("click", handleSaveSup);
 
 function handleSaveSup() {
-    // get the current tab
+    // Get the current/active tab
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const activeTab = tabs[0];
         const tabTitle = activeTab.title;
@@ -21,8 +21,8 @@ function handleSaveSup() {
     });
 }
 
-function manageBookmarks(title, url) {
-    // Search for SignUpSaver Folder
+function manageBookmarks(tabTitle, tabUrl) {
+    // Search for SignUpSaver folder
     chrome.bookmarks.search(
         { query: "SignUpSaver", title: "SignUpSaver" },
         function (folder) {
@@ -30,38 +30,39 @@ function manageBookmarks(title, url) {
 
             // If folder exists, create bookmark
             if (folderId) {
-                createBookmark(title, url, folderId);
-            } else {
-                // Else, create folder
-                createSignUpSaverFolder(title, url);
+                createBookmark(tabTitle, tabUrl, folderId);
+                return;
             }
+
+            // Default, create SignUpSaver folder
+            createSignUpSaverFolder(tabTitle, tabUrl);
         }
     );
 
-    // Create SignUpSaver Folder
-    function createSignUpSaverFolder(title, url) {
+    // Create SignUpSaver folder
+    function createSignUpSaverFolder(tabTitle, tabUrl) {
         chrome.bookmarks.create(
             {
                 title: "SignUpSaver",
             },
             function (folder) {
                 // Create first bookmark
-                createBookmark(title, url, folder.id);
+                createBookmark(tabTitle, tabUrl, folder.id);
             }
         );
     }
 
-    // Create SignUpSaver Bookmark
-    function createBookmark(title, url, folderId) {
+    // Create SignUpSaver bookmark
+    function createBookmark(tabTitle, tabUrl, folderId) {
         chrome.bookmarks.create(
             {
-                title: title,
-                url: url,
+                title: tabTitle,
+                url: tabUrl,
                 parentId: folderId,
                 index: 0,
             },
             function () {
-                addToBookmarkList(title);
+                addToBookmarkList(tabTitle);
             }
         );
 
@@ -92,10 +93,10 @@ function manageBookmarks(title, url) {
     }
 
     // Add to Bookmark List
-    function addToBookmarkList(title) {
+    function addToBookmarkList(tabTitle) {
         bookmarks.appendChild(
             Object.assign(document.createElement("li"), {
-                innerHTML: title,
+                innerHTML: tabTitle,
             })
         );
     }
