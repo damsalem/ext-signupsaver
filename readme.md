@@ -1,25 +1,31 @@
-# TL;DR
+# SignUpSaver
+
+A Chrome extension to save Sign Ups from [SignUpGenius.com](https://www.signupgenius.com/)
+
+# Coding
+
+## TL;DR
 
 This chrome extension uses a `manifest.json` as an outline of all pieces, sort of like a `package.json`.
 
 `/popup/` contains the markup and related files to handle everything you see after clicking on the extension button in Chrome.
 It also contains `popup.js` which handles the bookmarks
 
-# Observations
+## Observations
 
-## Debugging Errors
+### Debugging Errors
 
 To update a Chrome extension under development, you must not only hit the reload button for the extension, but also reload the browser tab else errors will likely persist
 
-## Accessing Console from Extensions Page
+### Accessing Console from Extensions Page
 
 Add a `background.js` file and call it as a service worker in the manifest.json
 
-## Gathering Tab Info
+### Gathering Tab Info
 
 Rather than scraping the title from a tab using the `content_scripts`, we can simply grab that data from the active tab using the `chrome.tabs` APIs.
 
-## Sharing Information
+### Sharing Information
 
 There are 3 contexts or environments for Chrome extensions
 
@@ -35,33 +41,33 @@ Each have their own console.
 
 Each can communicate with each other using various APIs, see **Sending Data Between Chrome Ext Scripts**
 
-# References Used to Build This Extension
+## References Used to Build This Extension
 
-## High Level Overview
+### High Level Overview
 
 https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/
 
-## Chrome Extension Architecture
+### Chrome Extension Architecture
 
 https://developer.chrome.com/docs/extensions/mv3/architecture-overview/
 
-## Explanation of manifest.json
+### Explanation of manifest.json
 
 https://developer.chrome.com/docs/extensions/mv3/manifest/
 
-## Wait Until AngularJS is Loaded
+### Wait Until AngularJS is Loaded
 
 https://developer.mozilla.org/en-US/docs/Web/API/Document/readyState
 
-## Extension That Makes Use of Bookmarks
+### Extension That Makes Use of Bookmarks
 
 https://github.com/GoogleChrome/chrome-extensions-samples/tree/main/_archive/mv2/api/bookmarks/basic
 
-### API Reference of chrome.bookmarks
+#### API Reference of chrome.bookmarks
 
 https://developer.chrome.com/docs/extensions/reference/bookmarks/
 
-## Sending Data Between Chrome Ext Scripts
+### Sending Data Between Chrome Ext Scripts
 
 https://plainenglish.io/blog/how-to-send-data-between-chrome-extension-scripts-1182ce67b659
 https://developer.chrome.com/docs/extensions/mv3/messaging/
