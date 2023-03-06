@@ -32,6 +32,13 @@ body {
 	padding-left: 0;
 }
 .bookmark {
+	display: flex;
+	justify-content: space-between;
 	line-height: 1.3;
 	padding-bottom: 5px;
+}
+.delete {
+	color: red;
+	font-weight: bold;
+	cursor: pointer;
 }

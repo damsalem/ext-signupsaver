@@ -2,6 +2,7 @@ const bookmarks = document.querySelector("#bookmarks");
 const saveSupButton = document.querySelector("#button");
 const changeText = document.querySelector("#changeText");
 
+// Run when extension is clicked
 document.addEventListener("DOMContentLoaded", async function () {
 	// Search for existing folder
 	let folderId = await getSignUpSaverFolderId();
@@ -12,10 +13,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 	// Query bookmarks for matches
 	const bookmarks = await getAllSignUpSaverBookmarks(folderId);
 
-	//Update popup unordered list
+	// Update popup unordered list
 	setupBookmarkList(bookmarks);
+
+	// Handle clicks to delete buttons
+	const deleteButtons = document.querySelectorAll(".delete");
+	deleteButtons.forEach((button) => {
+		button.addEventListener("click", (event) => {
+			const bookmarkId = event.target.dataset.id;
+			deleteUpdateList(bookmarkId);
+		});
+	});
 });
 
+// Handle clicks to [Save Sign Up] button
 saveSupButton.addEventListener("click", handleSaveSup);
 
 async function handleSaveSup() {
@@ -32,7 +43,7 @@ async function handleSaveSup() {
 	const folderId = await searchOrCreateSignUpSaverFolder();
 
 	// Create the bookmark
-	const { title, url, isExistingBookmark } = await createBookmark(
+	const { id, title, url, isExistingBookmark } = await createBookmark(
 		activeTabTitle,
 		activeTabUrl,
 		folderId
@@ -50,7 +61,13 @@ async function handleSaveSup() {
 		return;
 	}
 	// Update popup unordered list
-	addToBookmarkList(title, url);
+	const newLi = addToBookmarkList(title, url, id);
+
+	// Add event listener for delete button
+	newLi.addEventListener("click", (event) => {
+		const bookmarkId = event.target.dataset.id;
+		deleteUpdateList(bookmarkId);
+	});
 
 	// Toggle change text in popup
 	toggleChangeText("addition");
@@ -69,6 +86,24 @@ async function searchOrCreateSignUpSaverFolder() {
 		folderId = await createSignUpSaverFolderId();
 	}
 	return folderId;
+}
+
+// Delete bookmarks and update list
+async function deleteUpdateList(id) {
+	console.log(id);
+	// Delete bookmark
+	deleteBookmarkById(id);
+
+	// Search for existing folder
+	let folderId = await getSignUpSaverFolderId();
+
+	// Query bookmarks for matches
+	const bookmarks = await getAllSignUpSaverBookmarks(folderId);
+
+	// Update delete li from unordered list
+	const deleteButton = document.querySelector(`[data-id="${id}"`);
+	const li = deleteButton.parentElement;
+	li.remove();
 }
 
 // Search for SignUpSaver folder
@@ -118,6 +153,11 @@ async function createBookmark(tabTitle, tabUrl, folderId) {
 	return { ...newBookmark, isExistingBookmark };
 }
 
+// Delete SignUpSaver bookmark
+async function deleteBookmarkById(id) {
+	return await chrome.bookmarks.remove(id);
+}
+
 /****
  *
  * Update Popup.html
@@ -152,33 +192,60 @@ function toggleChangeText(change = "addition") {
 
 // Get Relevant Bookmarks and Populate List
 function setupBookmarkList(tabTitleArray) {
-	tabTitleArray.forEach(({ title, url }) => {
+	tabTitleArray.forEach(({ title, url, id }) => {
+		const shortenedTitle = title
+			.split(" ")
+			.slice(0, 3)
+			.join(" ")
+			.substring(0, 25)
+			.trim();
 		const link = document.createElement("a");
 		link.href = url;
 		link.target = "_blank";
-		link.innerText = title;
+		link.innerText = shortenedTitle;
+
+		const deleteButton = document.createElement("span");
+		deleteButton.innerText = "X";
+		deleteButton.className = "delete";
+		deleteButton.dataset.id = id;
 
 		const li = document.createElement("li");
+		li.className = "bookmark";
 		li.appendChild(link);
+		li.appendChild(deleteButton);
 
 		bookmarks.appendChild(li);
 	});
 }
 
 // Add Latest Bookmark to List
-function addToBookmarkList(title, url) {
+function addToBookmarkList(title, url, id) {
+	const shortenedTitle = title
+		.split(" ")
+		.slice(0, 3)
+		.join(" ")
+		.substring(0, 25)
+		.trim();
 	const link = document.createElement("a");
 	link.href = url;
 	link.target = "_blank";
-	link.innerText = title;
-	link.className = "bookmark";
+	link.innerText = shortenedTitle;
+
+	const deleteButton = document.createElement("span");
+	deleteButton.innerText = "X";
+	deleteButton.className = "delete";
+	deleteButton.dataset.id = id;
 
 	const li = document.createElement("li");
+	li.className = "bookmark";
 	li.appendChild(link);
+	li.appendChild(deleteButton);
 
 	if (bookmarks.firstChild) {
 		bookmarks.insertBefore(li, bookmarks.firstChild);
 	} else {
 		bookmarks.appendChild(li);
 	}
+
+	return li;
 }
