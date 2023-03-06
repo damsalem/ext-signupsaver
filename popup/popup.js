@@ -38,8 +38,14 @@ async function handleSaveSup() {
 		folderId
 	);
 
+	if (!title && !url && isExistingBookmark) {
+		// Not a valid page to bookmark
+		toggleChangeText("notSug");
+		return;
+	}
+
 	if (isExistingBookmark) {
-		// Toggle change text in popup
+		// Bookmark aleady exists
 		toggleChangeText("exists");
 		return;
 	}
@@ -52,9 +58,18 @@ async function handleSaveSup() {
 
 /****
  *
- * Utility Functions
+ * CRUD Functions for Bookmarks
  *
  ****/
+
+// Search for folder, if it doesn't exist, create it
+async function searchOrCreateSignUpSaverFolder() {
+	let folderId = await getSignUpSaverFolderId();
+	if (!folderId) {
+		folderId = await createSignUpSaverFolderId();
+	}
+	return folderId;
+}
 
 // Search for SignUpSaver folder
 async function getSignUpSaverFolderId(
@@ -72,15 +87,6 @@ async function createSignUpSaverFolderId(title = "SignUpSaver") {
 	return folder.id;
 }
 
-// Search for folder, if it doesn't exist, create it
-async function searchOrCreateSignUpSaverFolder() {
-	let folderId = await getSignUpSaverFolderId();
-	if (!folderId) {
-		folderId = await createSignUpSaverFolderId();
-	}
-	return folderId;
-}
-
 // Search for bookmarks within the folder
 async function getAllSignUpSaverBookmarks(id) {
 	return await chrome.bookmarks.getChildren(id);
@@ -90,6 +96,12 @@ async function getAllSignUpSaverBookmarks(id) {
 async function createBookmark(tabTitle, tabUrl, folderId) {
 	let isExistingBookmark = false;
 	const query = { title: tabTitle, url: tabUrl };
+
+	if (!tabUrl.match(/.*signupgenius\.com\/go\/.*/i)) {
+		isExistingBookmark = true;
+		return { title: "", url: "", isExistingBookmark };
+	}
+
 	const [existingBookmark] = await chrome.bookmarks.search(query);
 	if (existingBookmark && Object.keys(existingBookmark).length !== 0) {
 		isExistingBookmark = true;
@@ -106,6 +118,12 @@ async function createBookmark(tabTitle, tabUrl, folderId) {
 	return { ...newBookmark, isExistingBookmark };
 }
 
+/****
+ *
+ * Update Popup.html
+ *
+ ****/
+
 // Toggle ChangeText
 // parameters include: "addition", "removal", and "exists"
 function toggleChangeText(change = "addition") {
@@ -118,6 +136,9 @@ function toggleChangeText(change = "addition") {
 			break;
 		case "exists":
 			changeText.innerHTML = "Bookmark already exists";
+			break;
+		case "notSug":
+			changeText.innerHTML = "That doesn't look like a Sign Up!";
 			break;
 		default:
 			changeText.innerHTML = "Hmmm that didn't work";
