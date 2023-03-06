@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "SignUpSaver",
-	"description": "Save a SignUp from SignUpGenius",
+	"description": "Quickly save and access your favorite Sign Ups from SignUpGenius",
 	"version": "1.0.0",
 	"action": {
 		"default_popup": "popup/popup.html"
