@@ -42,7 +42,11 @@ https://plainenglish.io/blog/how-to-send-data-between-chrome-extension-scripts-1
 
 To update a Chrome extension under development, you must not only hit the reload button for the extension, but also reload the browser tab else errors will likely persist
 
-## Gathering Macro Tab Info
+## Accessing Console from Extensions Page
+
+Add a `background.js` file and call it as a service worker in the manifest.json
+
+## Gathering Tab Info
 
 Rather than scraping the title from a tab using the `content_scripts`, we can simply grab that data from the active tab using the `chrome.tabs` APIs.
 
@@ -50,8 +54,8 @@ Rather than scraping the title from a tab using the `content_scripts`, we can si
 
 The following are two separate environments:
 
--   Scripts called by `content_scripts` within `manifest.json` show their content in the browser's console.
--   Scripts called within `/popup/popup.js` show their content in the extension's console.
+- Scripts called by `content_scripts` within `manifest.json` show their content in the browser's console.
+- Scripts called within `/popup/popup.js` show their content in the extension's console.
 
 By that same concept, the scope of `content_scripts` is the browser.
 Whereas, the scope of `/popup/popup.js` is the extension.
