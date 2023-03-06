@@ -1,1 +1,1 @@
-// This exists at this time only to have a link in chrome://extensions/ that directly opens the console
+// This exists only to create a link to the console in chrome://extensions/
