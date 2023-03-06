@@ -90,7 +90,6 @@ async function searchOrCreateSignUpSaverFolder() {
 
 // Delete bookmarks and update list
 async function deleteUpdateList(id) {
-	console.log(id);
 	// Delete bookmark
 	deleteBookmarkById(id);
 
