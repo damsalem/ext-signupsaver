@@ -2,7 +2,6 @@ const bookmarks = document.querySelector("#bookmarks");
 const saveSupButton = document.querySelector("#button");
 const changeText = document.querySelector("#changeText");
 
-// TODO: Compare the new bookmark with existing to avoid duplicates
 // TODO: Turn the icon grayscale when not on a SUG SUP page
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -35,12 +34,17 @@ async function handleSaveSup() {
 	const folderId = await searchOrCreateSignUpSaverFolder();
 
 	// Create the bookmark
-	const { title, url } = await createBookmark(
+	const { title, url, isExistingBookmark } = await createBookmark(
 		activeTabTitle,
 		activeTabUrl,
 		folderId
 	);
 
+	if (isExistingBookmark) {
+		// Toggle change text in popup
+		toggleChangeText("exists");
+		return;
+	}
 	// Update popup unordered list
 	addToBookmarkList(title, url);
 
@@ -86,12 +90,22 @@ async function getAllSignUpSaverBookmarks(id) {
 
 // Create SignUpSaver bookmark
 async function createBookmark(tabTitle, tabUrl, folderId) {
-	return await chrome.bookmarks.create({
+	let isExistingBookmark = false;
+	const query = { title: tabTitle, url: tabUrl };
+	const [existingBookmark] = await chrome.bookmarks.search(query);
+	if (existingBookmark && Object.keys(existingBookmark).length !== 0) {
+		isExistingBookmark = true;
+		return { ...existingBookmark, isExistingBookmark };
+	}
+
+	const newBookmark = await chrome.bookmarks.create({
 		title: tabTitle,
 		url: tabUrl,
 		parentId: folderId,
 		index: 0,
 	});
+
+	return { ...newBookmark, isExistingBookmark };
 }
 
 // Toggle ChangeText
