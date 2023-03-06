@@ -150,6 +150,7 @@ function addToBookmarkList(title, url) {
 	link.href = url;
 	link.target = "_blank";
 	link.innerText = title;
+	link.className = "bookmark";
 
 	const li = document.createElement("li");
 	li.appendChild(link);
