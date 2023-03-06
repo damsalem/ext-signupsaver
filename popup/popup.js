@@ -2,31 +2,22 @@ const bookmarks = document.querySelector("#bookmarks");
 const saveSupButton = document.querySelector("#button");
 const changeText = document.querySelector("#changeText");
 
-// TODO: Get the popup.html markup state from existing bookmarks
 // TODO: Compare the new bookmark with existing to avoid duplicates
 // TODO: Turn the icon grayscale when not on a SUG SUP page
 
-/* chrome.action.onClicked.addListener(function () {
-	console.log("clicked!");
-	try {
-		await(async () => {
-			console.log("onLoadFn");
-			// Search for existing folder
-			let folderId = await getSignUpSaverFolderId();
+document.addEventListener("DOMContentLoaded", async function () {
+	// Search for existing folder
+	let folderId = await getSignUpSaverFolderId();
 
-			if (!folderId) {
-				return;
-			}
-			// Query bookmarks for matches
-			const bookmarks = await getSignUpSaverBookmarks(folderId);
-			console.log("bookmarks", bookmarks);
-
-			//Update popup unordered list
-		})();
-	} catch (error) {
-		console.error(error);
+	if (!folderId) {
+		return;
 	}
-}); */
+	// Query bookmarks for matches
+	const bookmarks = await getAllSignUpSaverBookmarks(folderId);
+
+	//Update popup unordered list
+	setupBookmarkList(bookmarks);
+});
 
 saveSupButton.addEventListener("click", handleSaveSup);
 
@@ -44,12 +35,14 @@ async function handleSaveSup() {
 	const folderId = await searchOrCreateSignUpSaverFolder();
 
 	// Create the bookmark
-	createBookmark(activeTabTitle, activeTabUrl, folderId);
-
-	// Query bookmarks for matches
-	const bookmarkArray = await getSignUpSaverBookmarks(folderId);
+	const { title, url } = await createBookmark(
+		activeTabTitle,
+		activeTabUrl,
+		folderId
+	);
 
 	// Update popup unordered list
+	addToBookmarkList(title, url);
 
 	// Toggle change text in popup
 	toggleChangeText("addition");
@@ -87,7 +80,7 @@ async function searchOrCreateSignUpSaverFolder() {
 }
 
 // Search for bookmarks within the folder
-async function getSignUpSaverBookmarks(id) {
+async function getAllSignUpSaverBookmarks(id) {
 	return await chrome.bookmarks.getChildren(id);
 }
 
@@ -124,13 +117,34 @@ function toggleChangeText(change = "addition") {
 	}, 2000);
 }
 
-// Add to Bookmark List
-function addToBookmarkList(tabTitleArray) {
-	tabTitleArray.forEach((title) => {
-		bookmarks.appendChild(
-			Object.assign(document.createElement("li"), {
-				innerHTML: title,
-			})
-		);
+// Get Relevant Bookmarks and Populate List
+function setupBookmarkList(tabTitleArray) {
+	tabTitleArray.forEach(({ title, url }) => {
+		const link = document.createElement("a");
+		link.href = url;
+		link.target = "_blank";
+		link.innerText = title;
+
+		const li = document.createElement("li");
+		li.appendChild(link);
+
+		bookmarks.appendChild(li);
 	});
+}
+
+// Add Latest Bookmark to List
+function addToBookmarkList(title, url) {
+	const link = document.createElement("a");
+	link.href = url;
+	link.target = "_blank";
+	link.innerText = title;
+
+	const li = document.createElement("li");
+	li.appendChild(link);
+
+	if (bookmarks.firstChild) {
+		bookmarks.insertBefore(li, bookmarks.firstChild);
+	} else {
+		bookmarks.appendChild(li);
+	}
 }
