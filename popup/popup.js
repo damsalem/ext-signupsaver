@@ -2,8 +2,6 @@ const bookmarks = document.querySelector("#bookmarks");
 const saveSupButton = document.querySelector("#button");
 const changeText = document.querySelector("#changeText");
 
-// TODO: Turn the icon grayscale when not on a SUG SUP page
-
 document.addEventListener("DOMContentLoaded", async function () {
 	// Search for existing folder
 	let folderId = await getSignUpSaverFolderId();

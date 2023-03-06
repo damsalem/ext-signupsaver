@@ -9,7 +9,7 @@
 	"background": {
 		"service_worker": "background.js"
 	},
-	"permissions": ["activeTab", "bookmarks"],
+	"permissions": ["activeTab", "bookmarks", "tabs"],
 	"icons": {
 		"16": "images/logo-16.png",
 		"32": "images/logo-32.png",
