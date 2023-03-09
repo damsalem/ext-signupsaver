@@ -2,7 +2,16 @@
 
 A Chrome extension to save Sign Ups from [SignUpGenius.com](https://www.signupgenius.com/)
 
-Install the app and try it out on the [Chrome Web Store](https://chrome.google.com/webstore/detail/signupsaver/ibbajpbnilbagkgamelfmjnpapadkagm)
+Install the published version on the [Chrome Web Store](https://chrome.google.com/webstore/detail/signupsaver/ibbajpbnilbagkgamelfmjnpapadkagm)
+
+Try out the latest, unpublished version here.
+
+1. Download the ZIP
+2. In Chrome, navigate to the [extensions page](chrome://extensions/)
+3. At the top right, toggle "Developer mode" to ON.
+4. Click on [Load unpacked]
+5. Select the ZIP file
+6. The install is complete, the extension can be found by clicking on the puzzle icon at the top right of your browser. For easy access, click on the pin icon.
 
 # Coding
 
