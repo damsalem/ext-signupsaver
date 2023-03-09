@@ -15,6 +15,12 @@ It also contains `popup.js` which handles the bookmarks
 
 ## Observations
 
+### Submitting Changes to Chrome Web Store
+
+Any changes that are made and submitted for review, whether that's the code or the store listing, will lock the listing until it is approved.
+
+There is no way to cancel a review process, you must wait until that's completed before submitting any further changes.
+
 ### Debugging Errors
 
 To update a Chrome extension under development, you must not only hit the reload button for the extension, but also reload the browser tab else errors will likely persist
