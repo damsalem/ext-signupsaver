@@ -2,6 +2,8 @@
 
 A Chrome extension to save Sign Ups from [SignUpGenius.com](https://www.signupgenius.com/)
 
+Install the app and try it out on the [Chrome Web Store](https://chrome.google.com/webstore/detail/signupsaver/ibbajpbnilbagkgamelfmjnpapadkagm)
+
 # Coding
 
 ## TL;DR
