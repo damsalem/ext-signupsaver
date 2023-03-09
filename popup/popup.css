@@ -3,7 +3,7 @@ body {
 }
 
 .container {
-	margin: 1rem 2rem 4rem;
+	margin: 1rem 2rem 1rem;
 }
 
 #button {
@@ -41,4 +41,8 @@ body {
 	color: red;
 	font-weight: bold;
 	cursor: pointer;
+}
+#search {
+	padding-top: 1rem;
+	text-align: center;
 }
