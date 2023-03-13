@@ -2,6 +2,10 @@ body {
 	border: 5px solid orange;
 }
 
+a:visited {
+	color: initial;
+}
+
 .container {
 	margin: 1rem 2rem 1rem;
 }
