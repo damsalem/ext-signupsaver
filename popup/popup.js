@@ -1,5 +1,5 @@
 const bookmarks = document.querySelector("#bookmarks");
-const saveSupButton = document.querySelector("#button");
+const saveSupButton = document.querySelector("#save");
 const changeText = document.querySelector("#changeText");
 
 // Run when extension is clicked
@@ -27,9 +27,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 // Handle clicks to [Save Sign Up] button
-saveSupButton.addEventListener("click", handleSaveSup);
+saveSupButton.addEventListener("click", (event) => handleSaveSup(event));
 
-async function handleSaveSup() {
+async function handleSaveSup(event) {
+	event.preventDefault();
 	// Get the current/active tab
 	const [activeTab] = await chrome.tabs.query({
 		active: true,

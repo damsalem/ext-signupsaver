@@ -2,22 +2,15 @@ body {
 	border: 5px solid orange;
 }
 
-a:visited {
-	color: initial;
-}
-a:hover {
-	opacity: 80%;
-}
-
 .container {
 	margin: 1rem 2rem 1rem;
 }
 
-#button {
+.button {
 	display: block;
 	font-size: 16px;
 	text-align: center;
-	background-color: #acc034;
+	text-decoration: none;
 	color: #fff;
 	padding: 10px 15px;
 	margin: 0 auto;
@@ -25,9 +18,22 @@ a:hover {
 	border-radius: 4px;
 	cursor: pointer;
 	transition: background-color 0.5s;
+	white-space: nowrap;
 }
-#button:hover {
+
+.button.green {
+	background-color: #acc034;
+}
+.button.green:hover {
 	background-color: #9eb030;
+}
+
+.button.orange {
+	background-color: #f68b1c;
+}
+.button.orange:hover {
+	opacity: initial;
+	background-color: #d67109;
 }
 
 #changeText {
@@ -44,32 +50,19 @@ a:hover {
 	line-height: 1.3;
 	padding-bottom: 5px;
 }
+.bookmark a:visited {
+	color: initial;
+}
+.bookmark a:hover {
+	opacity: 80%;
+}
 .delete {
 	color: red;
 	font-weight: bold;
 	cursor: pointer;
 }
-#search {
+
+.search {
 	padding-top: 1rem;
 	text-align: center;
-}
-#search #searchButton {
-	display: block;
-	font-size: 16px;
-	text-align: center;
-	text-decoration: none;
-	background-color: #f68b1c;
-	color: #fff;
-	padding: 10px 15px;
-	margin: 0 auto;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	transition: background-color 0.5s;
-	white-space: nowrap;
-}
-
-#search #searchButton:hover {
-	opacity: initial;
-	background-color: #d67109;
 }
