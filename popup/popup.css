@@ -5,6 +5,9 @@ body {
 a:visited {
 	color: initial;
 }
+a:hover {
+	opacity: 80%;
+}
 
 .container {
 	margin: 1rem 2rem 1rem;
